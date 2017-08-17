@@ -11,7 +11,7 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, db) => {
         _id: new ObjectID('59934460fdfacf46340aa2d0')
     }, {
         $set: { name: 'Mstaph' },
-        $inc: { age: -11 }
+        $inc: { age: 0 }
     }, {
         returnOriginal: false
     }).then((result) => {
