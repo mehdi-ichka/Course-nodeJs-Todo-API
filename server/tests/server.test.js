@@ -100,3 +100,35 @@ describe('GET /todos/:id', () => {
           .end(done)
     })
 })
+
+describe('DELETE /todos/:id', () => {
+    it('should return and delete todo by id', (done) => {
+        var id = someTodos[0]._id.toHexString();
+        request(app)
+          .delete(`/todos/${id}`)
+          .expect(200)
+          .expect((res) => {
+              expect(res.body.todo.text).toBe(someTodos[0].text)
+          })
+          .end((err, res) => {
+              if(err) {
+                  return done(err)
+              }
+
+              Todo.findById(id).then((todo) => {
+                  expect(todo).toBe({})
+                  done()
+              }).catch((e) => {
+                  done(err)
+              })
+          })
+    })
+
+    it('should return 404 for no todo object ids', (done) => {
+        var hexId = ObjectID().toHexString()
+        request(app)
+          .delete(`/todos/${hexId}`)
+          .expect(404)
+          .end(done)
+    })
+})
