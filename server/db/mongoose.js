@@ -8,4 +8,3 @@ module.exports = { mongoose };
 
 // cd "C:\Program Files\MongoDB\Server\3.4\bin"
 // ./mongod --dbpath "C:\Users\Mehdi Ichkarrane\mongo-data"
-// mongodb://mehdiBro:mehdiborder21@ds153413.mlab.com:53413/mongobase 
