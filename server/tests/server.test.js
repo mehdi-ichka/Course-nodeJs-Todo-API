@@ -12,7 +12,9 @@ const someTodos = [
     },
     {
         _id: new ObjectID(),
-        text: 'ontherthing i should do'
+        text: 'ontherthing i should do',
+        completedAt: 333,
+        completed:true
     }
 ]
 
@@ -128,6 +130,48 @@ describe('DELETE /todos/:id', () => {
         var hexId = ObjectID().toHexString()
         request(app)
           .delete(`/todos/${hexId}`)
+          .expect(404)
+          .end(done)
+    })
+})
+
+describe('PATCH /todos/:id', () => {
+    it('should return and patch todo by id', (done) => {
+        var id = someTodos[0]._id.toHexString();
+        var text = 'new text for test';
+
+        request(app)
+          .patch(`/todos/${id}`)
+          .send({
+            text: text,
+            completed: true
+          })
+          .expect(200)
+          .expect((res) => {
+              expect(res.body.todo.text).toBe(text)
+              expect(res.body.todo.completed).toBe(true)
+              expect(res.body.todo.completedAt).toBeA('number')
+          })
+          .end((err, res) => {
+              if(err) {
+                  return done(err)
+              }
+
+              Todo.findById(id).then((todo) => {
+                expect(res.body.todo.text).toBe(text)
+                expect(res.body.todo.completed).toBe(true)
+                expect(res.body.todo.completedAt).toBeA('number')
+                done()
+              }).catch((e) => {
+                done(err)
+              })
+          })
+    })
+
+    it('should return 404 for no todo object ids', (done) => {
+        var hexId = ObjectID().toHexString()
+        request(app)
+          .patch(`/todos/${hexId}`)
           .expect(404)
           .end(done)
     })
