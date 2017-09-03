@@ -3,21 +3,23 @@ const User = require('./../../models/user')
 const {ObjectID} = require('mongodb')
 const jwt = require('jsonwebtoken')
 
+const userOneId =  new ObjectID()
+const userTwoId =  new ObjectID()
+
 const someTodos = [
     {
         _id: new ObjectID(),
-        text: 'SomeThing i should do'
+        text: 'SomeThing i should do',
+        _creator: userOneId
     },
     {
         _id: new ObjectID(),
         text: 'ontherthing i should do',
         completedAt: 333,
-        completed:true
+        completed:true,
+        _creator: userTwoId
     }
 ]
-
-const userOneId =  new ObjectID()
-const userTwoId =  new ObjectID()
 
 const someUsers = [
     {
@@ -32,6 +34,10 @@ const someUsers = [
         _id: new ObjectID(),
         email: 'mehdi@user.com',
         password: 'userTwoPass',
+        tokens: [{
+            access: 'auth',
+            token: jwt.sign({_id: userTwoId, access: 'auth'}, 'abc123').toString()
+        }]
     }
 ]
 
